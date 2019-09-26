@@ -3,6 +3,7 @@ package com.example.chatapp_01;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -12,37 +13,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+
 public class MainActivity extends AppCompatActivity
 {
-    User user;
-
-    //cached
     EditText usernameEditText,passwordEditText;
     TextView usernameHint,passwordHint;
 
-    //this function will run when server send back the response
-    public void onSignupLoginResponse(int flag)
+    public void test()
     {
-        switch(flag)
-        {
-            case CommunicationFlags.SIGN_UP_SUCCESSFULL:
-//                Toast.makeText(this,"SIGN_UP SUCCESSFULL",Toast.LENGTH_SHORT).show();
-                break;
-            case CommunicationFlags.LOGIN_SUCCESSFULL:
-//                Toast.makeText(this,"LOG_IN SUCCESSFULL",Toast.LENGTH_SHORT).show();
-                //Intent act2 = new Intent(this,act2.class);
-
-                break;
-            case CommunicationFlags.SIGN_UP_FAILED:
-                usernameHint.setText("Invalid Username,It is taken by Another User!");
-                break;
-            case CommunicationFlags.LOGIN_FAILED:
-                usernameHint.setText("Invalid Username!");
-                passwordHint.setText("Invalid Password!");
-                break;
-        }
+        System.out.println("Test passed");
     }
-
 
     public void onClickAuthenticate(View view)
     {
@@ -59,25 +43,31 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this,"Please Provide a Valid Username And Password",Toast.LENGTH_SHORT).show();
             return;
         }
+        if(username.contains(" "))
+        {
+            usernameHint.setText("Please no Spaces in username.");
+            return;
+        }
 
-        user = new User(this,username,password);
+        Authenticator authenticator = new Authenticator();
         //Process for Authenticating user
         try
         {
             if(button.getId() == R.id.loginButton)
             {
-                user.login();
+                Toast.makeText(this,"Logging you in...",Toast.LENGTH_SHORT).show();
+                authenticator.execute(username,password,Integer.toString(CommunicationFlags.LOGIN));
             }
             else if(button.getId() == R.id.signupButton)
             {
                 Toast.makeText(this,"Signing Up...",Toast.LENGTH_SHORT).show();
-                user.signup();
+                authenticator.execute(username,password,Integer.toString(CommunicationFlags.SIGN_UP));
             }
         }//try
         catch(IllegalArgumentException err)
         {
             Log.i("info",err.toString());
-        }//catch
+        }
     }//onClickAuthenticate
 
     @Override
@@ -87,10 +77,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         //cache variables
-        usernameEditText = (EditText)findViewById(R.id.usernameEditText);
-        passwordEditText = (EditText)findViewById(R.id.passwordEditText);
-
-        usernameHint = (TextView)findViewById(R.id.usernameHintTextView);
-        passwordHint = (TextView)findViewById(R.id.passwordHintTextView);
+        usernameEditText = findViewById(R.id.usernameEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        usernameHint = findViewById(R.id.usernameHintTextView);
+        passwordHint = findViewById(R.id.passwordHintTextView);
     }
-}
+ }
