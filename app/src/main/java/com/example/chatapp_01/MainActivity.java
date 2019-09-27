@@ -3,36 +3,62 @@ package com.example.chatapp_01;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements Networkable
 {
     EditText usernameEditText,passwordEditText;
     TextView usernameHint,passwordHint;
+    String username;
 
-    public void test()
+    @Override
+    public void networkResponse(String response)
     {
-        System.out.println("Test passed");
+        int flag = ResponseProcessor.getResponseHeader(response);
+        switch(flag)
+        {
+            case CommunicationFlags.SIGN_UP_SUCCESSFULL:
+                Toast.makeText(this,"SignUP Successfull",Toast.LENGTH_SHORT).show();
+                System.out.println("Signup SuccesFull");
+                break;
+            case CommunicationFlags.SIGN_UP_FAILED:
+                Toast.makeText(this,"SignUP Failed",Toast.LENGTH_SHORT).show();
+                usernameHint.setText("Invalid username!");
+                System.out.println("SignUp Failed");
+                break;
+            case CommunicationFlags.LOGIN_SUCCESSFULL:
+                Toast.makeText(this,"Login Successfull",Toast.LENGTH_SHORT).show();
+                System.out.println("Login Successfull");
+                Intent intent = new Intent(this,HomePage.class);
+                intent.putExtra("USERNAME",username);
+                startActivity(intent);
+                break;
+            case CommunicationFlags.LOGIN_FAILED:
+                usernameHint.setText("Invalid username or password");
+                passwordHint.setText("Invalid username or password");
+                Toast.makeText(this,"Login Failed",Toast.LENGTH_SHORT).show();
+                System.out.println("Login Failed");
+                break;
+            case CommunicationFlags.CONNECTION_FAILED:
+                Toast.makeText(this,"Server Down...\nPlease Try After Some Time",Toast.LENGTH_LONG).show();
+                System.out.println("Server Down...");
+                break;
+            default:
+                System.out.println("Invalid Response");
+                break;
+        }
     }
 
     public void onClickAuthenticate(View view)
     {
         //@TODO create password manager to validate password by regex
         Button button = (Button)view;
-        String username = usernameEditText.getText().toString();
+        username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
         usernameHint.setText("");
@@ -49,25 +75,20 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        Authenticator authenticator = new Authenticator();
-        //Process for Authenticating user
-        try
+        String netRequest = "";
+        if(button.getId() == R.id.loginButton)
         {
-            if(button.getId() == R.id.loginButton)
-            {
-                Toast.makeText(this,"Logging you in...",Toast.LENGTH_SHORT).show();
-                authenticator.execute(username,password,Integer.toString(CommunicationFlags.LOGIN));
-            }
-            else if(button.getId() == R.id.signupButton)
-            {
-                Toast.makeText(this,"Signing Up...",Toast.LENGTH_SHORT).show();
-                authenticator.execute(username,password,Integer.toString(CommunicationFlags.SIGN_UP));
-            }
-        }//try
-        catch(IllegalArgumentException err)
-        {
-            Log.i("info",err.toString());
+            netRequest += CommunicationFlags.LOGIN + CommunicationFlags.SEPARATOR_1;
+            Toast.makeText(this,"Logging you in...",Toast.LENGTH_SHORT).show();
         }
+        else if(button.getId() == R.id.signupButton)
+        {
+            netRequest += CommunicationFlags.SIGN_UP + CommunicationFlags.SEPARATOR_1;
+            Toast.makeText(this,"Signing Up...",Toast.LENGTH_SHORT).show();
+        }
+
+        netRequest += username + CommunicationFlags.SEPARATOR_2 + password;
+        new NetTask(this).execute(netRequest);
     }//onClickAuthenticate
 
     @Override
@@ -77,7 +98,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         //cache variables
-        usernameEditText = findViewById(R.id.usernameEditText);
+        usernameEditText = findViewById(R.id.usernameTextViewHomePage);
         passwordEditText = findViewById(R.id.passwordEditText);
         usernameHint = findViewById(R.id.usernameHintTextView);
         passwordHint = findViewById(R.id.passwordHintTextView);
