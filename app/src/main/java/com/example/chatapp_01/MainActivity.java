@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements Networkable
                 System.out.println("Login Successfull");
                 Intent intent = new Intent(this,HomePage.class);
                 intent.putExtra("USERNAME",username);
+                intent.putExtra("USER_OBJ_ID",ResponseProcessor.getUserObjectId(response));
                 startActivity(intent);
                 break;
             case CommunicationFlags.LOGIN_FAILED:

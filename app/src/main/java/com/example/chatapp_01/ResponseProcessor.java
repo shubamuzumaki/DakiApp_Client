@@ -16,4 +16,33 @@ public class ResponseProcessor
             return CommunicationFlags.ERR_INVALID_ARGUMENTS;
         }
     }
+
+    public static String getUserObjectId(String response)
+    {
+        try
+        {
+            return response.split(CommunicationFlags.SEPARATOR_1)[1];
+        }
+        catch(ArrayIndexOutOfBoundsException aiobe)
+        {
+            System.out.println("Err in response processor - getUserObjId: "+ aiobe);
+            return Integer.toString(CommunicationFlags.ERR_INVALID_ARGUMENTS);
+        }
+    }
+
+    public static String[] getFriendList(String response)
+    {
+        String[] friendList = null;
+        try
+        {
+            String listString = response.split(CommunicationFlags.SEPARATOR_1)[1];
+            friendList = listString.split(CommunicationFlags.SEPARATOR_FRIEND_LIST);
+            return friendList;
+        }
+        catch(ArrayIndexOutOfBoundsException aiobe)
+        {
+            System.out.println("Err in response processor - getFriend List: "+ aiobe);
+            return friendList;
+        }
+    }
 }
