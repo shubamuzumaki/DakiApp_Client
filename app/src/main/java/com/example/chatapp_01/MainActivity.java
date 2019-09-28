@@ -79,16 +79,15 @@ public class MainActivity extends AppCompatActivity implements Networkable
         String netRequest = "";
         if(button.getId() == R.id.loginButton)
         {
-            netRequest += CommunicationFlags.LOGIN + CommunicationFlags.SEPARATOR_1;
+            netRequest = RequestGenerator.getLoginRequest(username,password);
             Toast.makeText(this,"Logging you in...",Toast.LENGTH_SHORT).show();
         }
         else if(button.getId() == R.id.signupButton)
         {
-            netRequest += CommunicationFlags.SIGN_UP + CommunicationFlags.SEPARATOR_1;
+            netRequest = RequestGenerator.getSignUpRequest(username,password);
             Toast.makeText(this,"Signing Up...",Toast.LENGTH_SHORT).show();
         }
 
-        netRequest += username + CommunicationFlags.SEPARATOR_2 + password;
         new NetTask(this).execute(netRequest);
     }//onClickAuthenticate
 

@@ -45,4 +45,17 @@ public class ResponseProcessor
             return friendList;
         }
     }
+
+    public static String getFriendId(String response)
+    {
+        try
+        {
+            return  response.split(CommunicationFlags.SEPARATOR_1)[1];
+        }
+        catch(ArrayIndexOutOfBoundsException aiobe)
+        {
+            System.out.println("Err in response processor - getFriend Id: "+ aiobe);
+            return null;
+        }
+    }
 }
