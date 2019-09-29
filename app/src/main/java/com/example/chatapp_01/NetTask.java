@@ -22,7 +22,7 @@ public class NetTask extends AsyncTask<String,Void,String>
         {
             String request = params[0];
             System.out.println("Sending Request" + request);
-            Socket client = new Socket(NetworkInfo.SERVER_IP,NetworkInfo.SERVER_PORT);
+            Socket client = new Socket(InetAddress.getByName(NetworkInfo.SERVER_IP),NetworkInfo.SERVER_PORT);
             client.setSoTimeout(5000);
             DataOutputStream dout = new DataOutputStream(client.getOutputStream());
             DataInputStream din = new DataInputStream(client.getInputStream());

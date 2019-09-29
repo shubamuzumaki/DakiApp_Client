@@ -36,7 +36,7 @@ public class ResponseProcessor
         try
         {
             String listString = response.split(CommunicationFlags.SEPARATOR_1)[1];
-            friendList = listString.split(CommunicationFlags.SEPARATOR_FRIEND_LIST);
+            friendList = listString.split(CommunicationFlags.SEPARATOR_3);
             return friendList;
         }
         catch(ArrayIndexOutOfBoundsException aiobe)

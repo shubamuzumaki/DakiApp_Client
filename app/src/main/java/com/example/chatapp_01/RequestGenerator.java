@@ -46,4 +46,29 @@ public class RequestGenerator
 
         return request.toString();
     }
+
+    public static String getSendMessageResponse(String userObjId, String friendId , String message)
+    {
+        StringBuffer request = new StringBuffer();
+        request.append(CommunicationFlags.SEND_MSG)
+                .append(CommunicationFlags.SEPARATOR_1)
+                .append(userObjId)
+                .append(CommunicationFlags.SEPARATOR_2)
+                .append(friendId)
+                .append(CommunicationFlags.SEPARATOR_3)
+                .append(message);
+        return request.toString();
+    }
+
+    static String getMessageRequest(String userObjId, String friendId)
+    {
+        StringBuffer request = new StringBuffer();
+        request.append(CommunicationFlags.GET_MESSAGES)
+                .append(CommunicationFlags.SEPARATOR_1)
+                .append(userObjId)
+                .append(CommunicationFlags.SEPARATOR_2)
+                .append(friendId);
+
+        return request.toString();
+    }
 }
