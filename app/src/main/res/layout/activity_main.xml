@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <EditText
-            android:id="@+id/usernameTextViewHomePage"
+            android:id="@+id/usernameTv"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:ems="10"
@@ -53,7 +53,7 @@
             android:textSize="28sp" />
 
         <TextView
-            android:id="@+id/usernameHintTextView"
+            android:id="@+id/usernameHintTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
@@ -62,7 +62,7 @@
             android:textStyle="italic" />
 
         <EditText
-            android:id="@+id/passwordEditText"
+            android:id="@+id/passwordEt"
             android:layout_width="match_parent"
             android:layout_height="69dp"
             android:ems="10"
@@ -71,7 +71,7 @@
             android:textSize="27sp" />
 
         <TextView
-            android:id="@+id/passwordHintTextView"
+            android:id="@+id/passwordHintTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"

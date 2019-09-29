@@ -12,9 +12,19 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements Networkable
 {
-    EditText usernameEditText,passwordEditText;
-    TextView usernameHint,passwordHint;
+    EditText usernameEt;
+    EditText passwordEt;
+    TextView usernameHint;
+    TextView passwordHint;
     String username;
+
+    public void redirectAfterLogIn(String userObjId)
+    {
+        Intent intent = new Intent(this,HomePage.class);
+        intent.putExtra("USERNAME",username);
+        intent.putExtra("USER_OBJ_ID",userObjId);
+        startActivity(intent);
+    }
 
     @Override
     public void networkResponse(String response)
@@ -34,10 +44,7 @@ public class MainActivity extends AppCompatActivity implements Networkable
             case CommunicationFlags.LOGIN_SUCCESSFULL:
                 Toast.makeText(this,"Login Successfull",Toast.LENGTH_SHORT).show();
                 System.out.println("Login Successfull");
-                Intent intent = new Intent(this,HomePage.class);
-                intent.putExtra("USERNAME",username);
-                intent.putExtra("USER_OBJ_ID",ResponseProcessor.getUserObjectId(response));
-                startActivity(intent);
+                redirectAfterLogIn(ResponseProcessor.getUserObjectId(response));
                 break;
             case CommunicationFlags.LOGIN_FAILED:
                 usernameHint.setText("Invalid username or password");
@@ -59,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements Networkable
     {
         //@TODO create password manager to validate password by regex
         Button button = (Button)view;
-        username = usernameEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+        username = usernameEt.getText().toString();
+        String password = passwordEt.getText().toString();
 
         usernameHint.setText("");
         passwordHint.setText("");
@@ -97,10 +104,14 @@ public class MainActivity extends AppCompatActivity implements Networkable
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //cache variables
-        usernameEditText = findViewById(R.id.usernameTextViewHomePage);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        usernameHint = findViewById(R.id.usernameHintTextView);
-        passwordHint = findViewById(R.id.passwordHintTextView);
+        initViews();
     }
- }
+
+    private void initViews()
+    {
+        usernameEt = findViewById(R.id.usernameTv);
+        passwordEt = findViewById(R.id.passwordEt);
+        usernameHint = findViewById(R.id.usernameHintTv);
+        passwordHint = findViewById(R.id.passwordHintTv);
+    }
+}

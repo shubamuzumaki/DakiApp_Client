@@ -40,7 +40,7 @@
             android:background="#E91E63" />
 
         <TextView
-            android:id="@+id/noFreindPopUpTextView"
+            android:id="@+id/noFreindPopUpTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -50,7 +50,7 @@
             android:visibility="visible" />
 
         <ListView
-            android:id="@+id/contactListView"
+            android:id="@+id/contactLv"
             android:layout_width="match_parent"
             android:layout_height="556dp" />
     </LinearLayout>
@@ -82,7 +82,7 @@
         app:layout_constraintHorizontal_bias="0.582"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <EditText
             android:id="@+id/friendIdEt"
